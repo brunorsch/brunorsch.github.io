@@ -183,8 +183,9 @@
                         </p>
                         <p><strong>Até R$ 5.000:</strong> Desconto de até R$ 312,89 (imposto zero)</p>
                         <p><strong>R$ 5.000 a R$ 7.350:</strong> Desconto decrescente linearmente</p>
-                        <p><strong>Fórmula do desconto:</strong><br><pre>R$978,62 * (0,133145 - Salário bruto)</pre></p>
                         <p><strong>Acima de R$ 7.350:</strong> Sem desconto</p>
+                        <p><strong>Fórmula do desconto:</strong><br><pre>R$978,62 * (0,133145 - Salário bruto)</pre></p>
+                        <!-- Pro dev que tá lendo isso aqui: Semana que vem eu faço um gráfico pra mostrar o decréscimo valeu -->
                     </div>
                     <p class="text-sm text-blue-700">Fonte: <a href="https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2487436" target="_blank">PL 1087/25</a></p>
                 </div>
@@ -250,8 +251,6 @@
 
                 for (let bracket of irTable) {
                     if (salaryAfterDiscount >= bracket.min && salaryAfterDiscount <= bracket.max) {
-                        console.log("Salário após desconto: ", salaryAfterDiscount);
-                        console.log("Faixa: ", bracket.min, " - ", bracket.max);
                         return Math.max(0, ((salaryAfterDiscount * bracket.rate) - bracket.deduction));
                     }
                 }
@@ -287,21 +286,15 @@
                 const currentIR = calculateCurrentIR(salary);
                 const inss = calculateINSS(salary);
 
-                console.log("IR atual: ", currentIR);
-                console.log("INSS: ", inss);
-
                 const discount = calculateNewIRDiscount(salary, currentIR);
                 const newIR = Math.max(0, currentIR - discount);
                 const savings = currentIR - newIR;
-                const annualSavings = savings * 12;
+                const annualSavings = savings * 13; // Considera o 13º salário
                 
-                // Calcular salário líquido anterior (salário bruto - INSS - IR atual)
                 const previousNetSalary = salary - inss - currentIR;
                 
-                // Calcular salário líquido novo (salário bruto - INSS - IR com nova lei)
                 const netSalary = salary - inss - newIR;
 
-                // Update displays
                 currentIRDiv.textContent = formatCurrency(currentIR);
                 newIRDiv.textContent = formatCurrency(newIR);
                 savingsDiv.textContent = formatCurrency(savings);
@@ -309,15 +302,11 @@
                 previousNetSalaryDiv.textContent = formatCurrency(previousNetSalary);
                 netSalaryDiv.textContent = formatCurrency(netSalary);
 
-                // Show results
                 resultsDiv.classList.remove("hidden");
             }
-
-            // Event listeners
             calculateBtn.addEventListener("click", calculateIR);
             salaryInput.addEventListener("input", calculateIR);
 
-            // Format input as user types
             salaryInput.addEventListener("blur", function() {
                 const value = parseFloat(this.value) || 0;
                 this.value = value.toFixed(2);
