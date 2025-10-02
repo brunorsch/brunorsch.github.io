@@ -260,8 +260,8 @@
             function calculateNewIRDiscount(salary, currentIR) {
                 if (salary <= 5000) {
                     return Math.min(312.89, currentIR);
-                } else if (salary <= 7000) {
-                    const discount = 1095.11 - (0.156445 * salary);
+                } else if (salary <= 7350) {
+                    const discount = 978.62 - (0.133145 * salary);
                     return Math.max(0, discount);
                 } else {
                     return 0;
